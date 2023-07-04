@@ -6,4 +6,10 @@ from .human import Human
 @pytest.fixture()
 def create_human():
     human = Human('Misha', 22, 'male')
-    return human
+    yield human
+
+
+@pytest.fixture()
+def create_giga_old_human():
+    human = Human('Misha', 99, 'male')
+    yield human
