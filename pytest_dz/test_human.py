@@ -18,7 +18,7 @@ def test_grow_reach_age_limit(create_giga_old_human):
         human.grow()
 
 
-# I think I found a bug here, because if an instance of the class creates an age
+# I think I found a bug here, because if I create an instance of a class with the age
 # that is higher than age_limit the status does not change to "dead",
 # needs to be fixed  in the initialization
 def test_grow_if_already_dead(create_dead_human):
