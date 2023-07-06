@@ -1,37 +1,36 @@
 import pytest
 
+from pytest_dz.human import Human
+
 
 def test_grow(create_human):
     human = create_human
+    new_age = human.age + 1
     human.grow()
-    assert human.age == 23
+    assert human.age == new_age
 
 
 def test_grow_reach_age_limit(create_giga_old_human):
     human = create_giga_old_human
     for _ in range(2):
         human.grow()
-    assert human._Human__status == "dead", "Person should reach age limit and die"
-
-
-def test_grow_if_already_dead(create_giga_old_human):
-    human = create_giga_old_human
-    human._Human__status = "dead"
     with pytest.raises(Exception, match="Misha is already dead..."):
         human.grow()
 
 
-def test_is_alive_status_alive(create_human):
-    human = create_human
-    result = human._Human__is_alive()
-    assert result is True, "Person should be alive"
-
-
-def test_is_alive_status_dead(create_human):
-    human = create_human
-    human._Human__status = "dead"
+# I think I found a bug here, because if an instance of the class creates an age
+# that is higher than age_limit the status does not change to "dead",
+# needs to be fixed  in the initialization
+def test_grow_if_already_dead(create_dead_human):
+    human = create_dead_human
     with pytest.raises(Exception, match="Misha is already dead..."):
-        human._Human__is_alive()
+        human.grow()
+
+
+def test_grow_if_age_is_negative(create_negative_human):
+    human = create_negative_human
+    with pytest.raises(Exception, match="Misha is already dead..."):
+        human.grow()
 
 
 def test_change_gender_valid(create_human):
@@ -58,11 +57,25 @@ def test_change_gender_invalid(create_human):
         human.change_gender(new_gender)
 
 
-def test_age_property(create_human):
-    human = create_human
-    assert human.age == 22
+def test_age_property():
+    human = Human('Misha', 22, 'male')
+    current_age = 22
+    assert human.age == current_age, "Age value isn't matched with the expected"
 
 
-def test_gender_property(create_human):
+def test_gender_property():
+    human = Human('Misha', 22, 'male')
+    current_gender = "male"
+    assert human.gender == current_gender, "Gender value isn't matched with the expected"
+
+
+def test_gender_type(create_human):
     human = create_human
-    assert human.gender == "male"
+    result = human.gender
+    assert isinstance(result, str), 'Gender should be string value'
+
+
+def test_age_type(create_human):
+    human = create_human
+    result = human.age
+    assert isinstance(result, int), 'Gender should be int value'
