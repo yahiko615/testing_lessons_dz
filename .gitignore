@@ -1,4 +1,3 @@
 .idea
 .pytest_cache
-.pytest_dz/__pycache__/
-.selenium_dz/__pycache__/
+
